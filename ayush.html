@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ayush</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0f;
+      --ink: #f0ece3;
+      --accent: #e8c97e;
+      --muted: #5a5a6e;
+      --grain-opacity: 0.06;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      overflow: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Radial glow */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,201,126,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .scene {
+      position: relative;
+      z-index: 1;
+      width: 100vw; height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Decorative corner lines */
+    .corner {
+      position: fixed;
+      width: 60px; height: 60px;
+      opacity: 0.3;
+    }
+    .corner--tl { top: 32px; left: 32px; border-top: 1px solid var(--accent); border-left: 1px solid var(--accent); }
+    .corner--tr { top: 32px; right: 32px; border-top: 1px solid var(--accent); border-right: 1px solid var(--accent); }
+    .corner--bl { bottom: 32px; left: 32px; border-bottom: 1px solid var(--accent); border-left: 1px solid var(--accent); }
+    .corner--br { bottom: 32px; right: 32px; border-bottom: 1px solid var(--accent); border-right: 1px solid var(--accent); }
+
+    .greeting {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.7s ease forwards 0.3s;
+    }
+
+    .name-wrap {
+      position: relative;
+      margin: 16px 0 24px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.55s;
+    }
+
+    h1 .italic {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* Underline accent */
+    .underline-svg {
+      position: absolute;
+      bottom: -10px; left: 0;
+      width: 100%; height: 12px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 1.2s;
+    }
+
+    .tagline {
+      font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.85s;
+    }
+
+    .divider {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      margin: 32px 0;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 1s;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1.1s;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #5ecf82;
+      box-shadow: 0 0 8px #5ecf82;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="corner corner--tl"></div>
+  <div class="corner corner--tr"></div>
+  <div class="corner corner--bl"></div>
+  <div class="corner corner--br"></div>
+
+  <main class="scene">
+    <p class="greeting">Welcome</p>
+
+    <div class="name-wrap">
+      <h1>Hi, I am<br><span class="italic">Ayush</span></h1>
+      <svg class="underline-svg" viewBox="0 0 400 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 8 Q100 2 200 8 Q300 14 400 6" stroke="#e8c97e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <p class="tagline">Nice to meet you</p>
+    <div class="divider"></div>
+    <div class="status">
+      <span class="dot"></span>
+      <span>Available &amp; ready to connect</span>
+    </div>
+  </main>
+</body>
+</html>
